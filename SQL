@@ -1,0 +1,58 @@
+-- 1. Create a combined lookup table for products and categories
+CREATE TABLE combined_products AS 
+SELECT 
+    s.product_id,
+    s.supplier_name, 
+    c.product_name,
+    c.category_name
+FROM suppliers s 
+JOIN category c 
+    ON s.product_id = c.product_id;
+
+-- Clean missing and raw supplier values
+UPDATE combined_products
+SET supplier_name = 'skyfarb'
+WHERE supplier_name IS NULL 
+   OR TRIM(supplier_name) = '';
+
+UPDATE combined_products
+SET supplier_name = TRIM(
+    BOTH ' ,' FROM REGEXP_REPLACE(
+        supplier_name, 
+        'копія|відправка|кременчук|big', 
+        '', 
+        'gi'
+    )
+)
+WHERE supplier_name ~* 'копія|кременчук|big';
+
+-- 2. Combine sales with standardized product and supplier details
+CREATE TABLE all_dates AS 
+SELECT 
+    sl.date_of_sale,
+    sl.delivery_status,
+    sl.order_date,
+    sl."order_number_CRM", 
+    sl.product_id,
+    sl.price,
+    sl.quantity,
+    cp.supplier_name,
+    cp.product_name,
+    cp.category_name
+FROM sales sl
+INNER JOIN combined_products cp
+    ON sl.product_id = cp.product_id;
+
+-- 3. Clean and convert price column to numeric data type
+SELECT 
+    *,
+    CAST(
+        REPLACE(
+            REPLACE(
+                REPLACE(price, ' ', ''), 
+                CHR(160), ''
+            ), 
+            ',', '.'
+        ) AS NUMERIC(10,2)
+    ) AS cleaned_price
+FROM all_dates;
