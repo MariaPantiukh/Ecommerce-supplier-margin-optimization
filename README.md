@@ -3,7 +3,7 @@
 ## Executive Summary
 This project addresses a critical e-commerce challenge: **identifying unprofitable suppliers and optimizing advertising budgets** to improve overall store profitability. Using real-world CRM data from a dropshipping online business, raw transaction records were processed with **PostgreSQL** and visualized in **Tableau** to evaluate supplier sales performance, margins, and advertising efficiency.
 
-🔗 **[View Interactive Dashboard on Tableau Public](https://public.tableau.com/views/YOUR_DASHBOARD_URL_HERE)**
+🔗 **[View Interactive Dashboard on Tableau Public](https://public.tableau.com/app/profile/mariia.pantiukh/viz/SalesAssortmentOptimization/SALESPERFORMANCEOVERVIEW)**
 ---
 
 ## 🎯 Business Problem & Key Questions
